@@ -16,7 +16,10 @@ fun sqr(x: Int) = x * x
  *
  * Вычисление квадрата вещественного числа
  */
-fun sqr(x: Double) = x * x
+fun sqr(x: Double): Double
+{
+    return x * x
+}
 
 /**
  * Пример
@@ -49,8 +52,8 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  * Пример главной функции
  */
 fun main() {
-    val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
-    println("Root product: $x1x2")
+    val res = sqr(8)
+    println("result = $res")
 }
 
 /**
@@ -59,7 +62,13 @@ fun main() {
  * Пользователь задает время в часах, минутах и секундах, например, 8:20:35.
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
-fun seconds(hours: Int, minutes: Int, seconds: Int): Int = TODO()
+fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
+    val secondsInMinute = 60
+    val secondsInHour = 60 * secondsInMinute
+    val hourSeconds = hours * secondsInHour
+    val minutesSeconds = minutes * secondsInMinute
+    return hourSeconds + minutesSeconds + seconds
+}
 
 /**
  * Тривиальная
@@ -68,7 +77,16 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = TODO()
  * Определить длину того же отрезка в метрах (в данном случае 18.98).
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
-fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = TODO()
+fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
+    val sagenesToVershoks = 48
+    val arshinsToVershoks = 48.0 / 3
+    val centimeterToMeter = 1.0 / 100
+    val vershoksToCentimeter = 4.445
+    val sagenesToMeter = sagenes * sagenesToVershoks * vershoksToCentimeter * centimeterToMeter
+    val arshinsToMeter = arshins * arshinsToVershoks * vershoksToCentimeter * centimeterToMeter
+    val vershoksToMeter = vershoks * vershoksToCentimeter * centimeterToMeter
+    return sagenesToMeter + arshinsToMeter + vershoksToMeter
+}
 
 /**
  * Тривиальная
