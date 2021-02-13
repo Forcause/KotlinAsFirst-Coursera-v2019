@@ -3,8 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.max
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Пример
@@ -112,7 +111,15 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    return if ((kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2))
+        3
+    else if (kingX == rookX1 || kingY == rookY1)
+        1
+    else if (kingX == rookX2 || kingY == rookY2)
+        2
+    else 0
+}
 
 /**
  * Простая
@@ -128,7 +135,15 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    return if ((abs(kingY - bishopY) == abs(kingX - bishopX)) && (kingX == rookX || kingY == rookY))
+        3
+    else if (abs(kingY - bishopY) == abs(kingX - bishopX))
+        2
+    else if (kingX == rookX || kingY == rookY)
+        1
+    else 0
+}
 
 /**
  * Простая
@@ -138,7 +153,19 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val max = maxOf(a, b, c)
+    val allSides = listOf(a, b, c).sorted()
+    return if ((a + b > c) && (a + c > b) && (b + c > a)) {
+        when {
+            max.pow(2.0) == (allSides[0].pow(2.0) + allSides[1].pow(2.0)) -> 1
+            max.pow(2.0) < (allSides[0].pow(2.0) + allSides[1].pow(2.0)) -> 0
+            else -> 2
+        }
+    } else {
+        -1
+    }
+}
 
 /**
  * Средняя
