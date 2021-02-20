@@ -60,14 +60,22 @@ fun digitCountInNumber(n: Int, m: Int): Int =
     }
 
 /**
- * Простая
+ * Тривиальная
  *
  * Найти количество цифр в заданном числе n.
- * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
+ * Напрэмер, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var count = 1
+    var tmp = n
+    while ((tmp / 10) != 0) {
+        tmp /= 10
+        count += 1
+    }
+    return count
+}
 
 /**
  * Простая
@@ -75,7 +83,12 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    return if (n <= 2)
+        1
+    else
+        fib(n - 1) + fib(n - 2)
+}
 
 /**
  * Простая
@@ -83,21 +96,41 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    for (i in 0 until m * n + 1) {
+        if (i % m == 0 && i % n == 0) {
+            val _lcm = i
+            if (i != 0) return _lcm
+        }
+    }
+    return -1
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    for (i in 2 until n + 1) {
+        if (n % i == 0)
+            return i
+    }
+    return n
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    for (i in n - 1 downTo 0) {
+        if (n % i == 0)
+            return i
+    }
+    return n
+}
 
 /**
  * Простая
@@ -140,9 +173,7 @@ fun collatzSteps(x: Int): Int = TODO()
  *
  * Для заданного x рассчитать с заданной точностью eps
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
- * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю.
- * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
- * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
+ * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double = TODO()
 
@@ -152,8 +183,6 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Для заданного x рассчитать с заданной точностью eps
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
- * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
- * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
 
@@ -207,4 +236,26 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    val cache = mutableListOf<Int>()
+    for (i in 0 until n + 1) {
+        val temp = fib(i)
+        if (temp > 10) {
+            getNumbersArray(temp).forEach { number -> cache.add(number) }
+        } else
+            cache.add(temp)
+        if (cache.count() > n)
+            return cache[n]
+    }
+    return cache[n]
+}
+
+fun getNumbersArray(n: Int): List<Int> {
+    var temp = n
+    val result = mutableListOf<Int>()
+    while (temp > 0) {
+        result.add(temp % 10)
+        temp /= 10
+    }
+    return result.reversed()
+}
