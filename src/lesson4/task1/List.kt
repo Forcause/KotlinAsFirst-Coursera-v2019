@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -226,7 +227,17 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int{
+    var result = 0
+    val inputString = str.reversed()
+    for (i in inputString.indices) {
+        result += if (inputString[i].isDigit())
+            (Character.getNumericValue(inputString[i]) * base.toDouble().pow(i)).toInt()
+        else
+            ((inputString[i].toDouble() - 87) * base.toDouble().pow(i)).toInt()
+    }
+    return result
+}
 
 /**
  * Сложная
@@ -236,7 +247,32 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val numeralViews = listOf(
+        1000 to "M",
+        900 to "CM",
+        500 to "D",
+        400 to "CD",
+        100 to "C",
+        90 to "XC",
+        50 to "L",
+        40 to "XL",
+        10 to "X", 9 to "IX",
+        5 to "V",
+        4 to "IV",
+        1 to "I").toMap()
+
+    var arabic = n
+    var resultRomanString = ""
+
+    for ((view, romanNumber) in numeralViews) {
+        while (arabic / view > 0) {
+            arabic -= view
+            resultRomanString += romanNumber
+        }
+    }
+    return resultRomanString
+}
 
 /**
  * Очень сложная
@@ -245,4 +281,99 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String =
+    if (n / 1000 > 0) {
+        if ((n / 10000) % 10 == 1){
+            (inRussian(n / 1000, true) + thousands[0] + inRussian(n % 1000)).dropLast(1)
+        } else {
+            (inRussian(n / 1000, true) + thousands[(n / 1000) % 10] + inRussian(n % 1000)).dropLast(1)
+        }
+    } else {
+        inRussian(n % 1000).dropLast(1)
+    }
+
+val hundreds =
+    arrayOf(
+        "",
+        "сто ",
+        "двести ",
+        "триста ",
+        "четыреста ",
+        "пятьсот ",
+        "шестьсот ",
+        "семьсот ",
+        "восемьсот ",
+        "девятьсот "
+    )
+val tens = arrayOf(
+    "",
+    "десять ",
+    "двадцать ",
+    "тридцать ",
+    "сорок ",
+    "пятьдесят ",
+    "шестьдесят ",
+    "семьдесят ",
+    "восемьдесят ",
+    "девяносто "
+)
+val ones = arrayOf(
+    "",
+    "один ",
+    "два ",
+    "три ",
+    "четыре ",
+    "пять ",
+    "шесть ",
+    "семь ",
+    "восемь ",
+    "девять ")
+
+val firstTen = arrayOf(
+    "десять ",
+    "одиннадцать ",
+    "двенадцать ",
+    "тринадцать ",
+    "четырнадцать ",
+    "пятнадцать ",
+    "шестнадцать ",
+    "семнадцать ",
+    "восемнадцать ",
+    "девятнадцать "
+)
+
+val thousands =
+    arrayOf(
+        "тысяч ",
+        "тысяча ",
+        "тысячи ",
+        "тысячи ",
+        "тысячи ",
+        "тысяч ",
+        "тысяч ",
+        "тысяч ",
+        "тысяч ",
+        "тысяч ")
+
+fun inRussian(n: Int, flag: Boolean = false): String {
+    if (n == 0) {
+        return ""
+    }
+
+    val digits = arrayOf(n % 10, (n / 10) % 10, n / 100)
+
+    if (digits[1] == 1) {
+        return (hundreds[digits[2]] + firstTen[digits[0]])
+    }
+
+    if (flag) {
+        if (digits[0] == 1) {
+            return (hundreds[digits[2]] + tens[digits[1]] + "одна ")
+        }
+        if (digits[0] == 2) {
+            return (hundreds[digits[2]] + tens[digits[1]] + "две ")
+        }
+    }
+
+    return (hundreds[digits[2]] + tens[digits[1]] + ones[digits[0]])
+}

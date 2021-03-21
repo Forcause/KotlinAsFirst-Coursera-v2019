@@ -83,12 +83,7 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int {
-    return if (n <= 2)
-        1
-    else
-        fib(n - 1) + fib(n - 2)
-}
+fun fib(n: Int): Int = TODO()
 
 /**
  * Простая
@@ -166,7 +161,15 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int{
+    var tmp = 0
+    var n = x
+    while (n > 1) {
+        if (n % 2 == 0) n /= 2 else n = 3 * n + 1
+        tmp++
+    }
+    return tmp
+}
 
 /**
  * Средняя
@@ -237,25 +240,20 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    val cache = mutableListOf<Int>()
-    for (i in 0 until n + 1) {
-        val temp = fib(i)
-        if (temp > 10) {
-            getNumbersArray(temp).forEach { number -> cache.add(number) }
-        } else
-            cache.add(temp)
-        if (cache.count() > n)
-            return cache[n]
-    }
-    return cache[n]
-}
-
-fun getNumbersArray(n: Int): List<Int> {
-    var temp = n
-    val result = mutableListOf<Int>()
-    while (temp > 0) {
-        result.add(temp % 10)
-        temp /= 10
-    }
-    return result.reversed()
+    var a: Int
+    var i = 1
+    var k = 0
+    val list: ArrayList<Int> = arrayListOf()
+    do {
+        a = fib(i)
+        do {
+            list.add(a % 10)
+            a /= 10
+        } while (a > 0)
+        if (k + list.size >= n) return list[list.size - n + k]
+        k += list.size
+        i++
+        list.clear()
+    } while (k < n)
+    return 0
 }
